@@ -10,7 +10,7 @@ Most of these scripts wrap around self-contained executables, such as [WinSCP](h
 finaid
 ------
 
-These scripts were designed to manage the files produced by EDconnect and mave them to the Banner Batch server.
+These scripts were designed to manage the files produced by EDconnect and make them to the Banner Batch server.
 
 **edload.au3** - The configuration GUI.
 
@@ -29,3 +29,9 @@ misc
 ----
 
 **catall.au3** - The original 16-bit DOS concat.exe program given to us would not work on Win7, so I wrote this to replace it.
+
+To Do
+=====
+
+Right now all the scripts are AutoIT scripts, but I would like to add Argos Reports, queries, and whatever comes from integrating Banner with E-Learning.
+

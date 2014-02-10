@@ -20,7 +20,7 @@ $startPosY = (@DesktopHeight - $winHeight) / 2
 
 ;; Build the GUI
 $gui = GUICreate($winTitle, $winWidth, $winHeight, $startPosX, $startPosY)
-$lblDirections = GUICtrlCreateLabel("Enter the filename of the Direct Deposit file below.", 5, 5, 310, 60)
+$lblDirections = GUICtrlCreateLabel("Enter the sequence number of the Direct Deposit below.", 5, 5, 310, 60)
 GUICtrlSetBkColor($lblDirections, 0x000000)
 GUICtrlSetColor($lblDirections, 0xff0000)
 GUICtrlSetFont($lblDirections, 18)
@@ -48,7 +48,7 @@ While 1
         Case $GUI_EVENT_CLOSE ; Ends the program
             ExitLoop
 		Case $btnDownload ; Downloads the LIS file
-			Local $file = GUICtrlRead($txtFilename)
+			Local $file = _MakeDIRDFile(GUICtrlRead($txtFilename))
 			If StringLen($file) > 0 Then
 				Local $settings[5]
 				_SettingsGet($settings)
@@ -186,4 +186,9 @@ EndFunc
 Func _Box($msg)
 	MsgBox(1024, "ALERT", $msg)
 	Exit
+EndFunc
+
+;; Stupid simple function for building the file name
+Func _MakeDIRDFile($seq)
+	Return "phpdird_" & $seq & ".lis"
 EndFunc

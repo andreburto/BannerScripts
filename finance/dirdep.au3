@@ -48,9 +48,10 @@ While 1
         Case $GUI_EVENT_CLOSE ; Ends the program
             ExitLoop
 		Case $btnDownload ; Downloads the LIS file
-			Local $file = _MakeDIRDFile(GUICtrlRead($txtFilename))
+			Local $file = GUICtrlRead($txtFilename)
 			If StringLen($file) > 0 Then
 				Local $settings[5]
+				$file = _MakeDIRDFile($file)
 				_SettingsGet($settings)
 				_ScriptDownload($settings[0],$settings[1],$settings[2],$settings[4],$settings[3],$base_dir,$file)
 				_TransferFiles($dlScr, $dlLog)
@@ -61,7 +62,6 @@ While 1
 					ExitLoop
 				Else
 					MsgBox(1024, "ALERT", "The file did not download.")
-					MsgBox(1024, "ALERT", $base_dir&"\"&$file)
 				EndIf
 			Else
 				MsgBox(1024, "ALERT", "You must enter a file name.")

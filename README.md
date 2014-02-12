@@ -24,7 +24,7 @@ Direct Deposit files were partially corrupted when acquired from the INB interfa
 misc
 ----
 
-**catall.au3** - The original 16-bit DOS concat.exe program given to us would not work on Win7, so I wrote this to replace it.
+**catall.au3** - The original 16-bit DOS filecat.exe program given to us would not work on Win7, so I wrote this to replace it.
 
 To Do
 =====

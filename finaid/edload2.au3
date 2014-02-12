@@ -10,7 +10,6 @@ Global $gui, $winTitle, $winWidth, $winHeight, $startPosX, $startPosY
 Global $settingsFile
 Global $btnBegin, $btnSettings, $btnExit
 Global $upScr = "upload.txt", $upLog = "up_log.txt"
-Global $dlScr = "download.txt", $dlLog = "down_log.txt"
 
 ;; declare globals
 $settingsFile = @ScriptDir & "\edload.ini"
@@ -192,22 +191,6 @@ Func _SettingsLoad(ByRef $up, ByRef $down, ByRef $paths)
 	$paths[3] = IniRead($settingsFile, "client", "TMP", "TEMP")
 EndFunc
 
-;; Create the WinSCP download script
-Func _ScriptDownload($id, $pw, $host, $hk, $rd, $ld, $files)
-	Dim $fr = FileOpen($dlScr, 2)
-	If $fr = -1 Then _Box("Cannot create download script.")
-	FileWriteLine($fr, "option batch abort")
-	FileWriteLine($fr, "option confirm off")
-	FileWriteLine($fr, "open sftp://" & $id & ":" & $pw & "@" & $host & " -hostkey=""" & $hk & """")
-	FileWriteLine($fr, "option transfer binary")
-	FileWriteLine($fr, "cd " & $rd)
-	FileWriteLine($fr, "lcd " & $ld)
-	FileWriteLine($fr, "get " & $files)
-	FileWriteLine($fr, "close")
-	FileWriteLine($fr, "exit")
-	FileClose($fr)
-EndFunc
-
 ;; Create the WinSCP upload script
 Func _ScriptUpload($id, $pw, $host, $hk, $rd, $ld, $files)
 	Dim $fr = FileOpen($upScr, 2)
@@ -291,7 +274,6 @@ Func _TheProcess()
 
 	;; Delete the WinSCP scripts
 	FileDelete(@ScriptDir & "\" & $upScr)
-	FileDelete(@ScriptDir & "\" & $dlScr)
 
 	;; Alert
 	MsgBox(1024, "Finished", "You may complete the process in Banner.")

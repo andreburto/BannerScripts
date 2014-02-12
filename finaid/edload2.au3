@@ -2,6 +2,7 @@
 #include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 #include <StaticConstants.au3>
+#Include <Array.au3>
 
 AutoItSetOption("MustDeclareVars", 1)
 
@@ -17,7 +18,7 @@ $settingsFile = @ScriptDir & "\edload.ini"
 ;; Set some initial values
 $winTitle = $winTitle
 $winWidth = 320
-$winHeight = 120
+$winHeight = 110
 $startPosX = (@DesktopWidth - $winWidth) / 2
 $startPosY = (@DesktopHeight - $winHeight) / 2
 
@@ -45,6 +46,7 @@ While 1
             ExitLoop
 		Case $btnBegin ; Starts the process
 			_TheProcess();
+			ExitLoop
 		Case $btnSettings ; Runs the Settings GUI
 			GUISetState(@SW_MINIMIZE, $gui);
 			_SettingsGUI();
@@ -63,11 +65,11 @@ Func _SettingsGUI()
 	;; Variables for the GUI
 	Local $sgui, $swidth, $sheight, $sX, $sY
 	Local $up[5], $down[5], $paths[5]
-	Local $up[5], $btnSave, $btnNevermind
+	Local $btnSave, $btnNevermind
 
 	;; GUI variables
 	$swidth = 400
-	$sheight = 380
+	$sheight = 360
 	$sX = (@DesktopWidth - $swidth) / 2
 	$sY = (@DesktopHeight - $sheight) / 2
 
@@ -77,16 +79,10 @@ Func _SettingsGUI()
 
 	GUICtrlCreateTabItem("DOWNLOAD")
 	GUICtrlCreateLabel("Information for the ED Connect Server", 15, 30, 250, 15)
-	GUICtrlCreateLabel("User name: ", 15, 55, 85, 15, $SS_RIGHT)
-	$down[0] = GUICtrlCreateInput("", 100, 55, 200, 20)
-	GUICtrlCreateLabel("Password: ", 15, 90, 85, 15, $SS_RIGHT)
-	$down[1] = GUICtrlCreateInput("", 100, 90, 200, 20)
-	GUICtrlCreateLabel("Remote Host: ", 15, 125, 85, 15, $SS_RIGHT)
-	$down[2] = GUICtrlCreateInput("", 100, 125, 200, 20)
-	GUICtrlCreateLabel("Remote Path: ", 15, 160, 85, 15, $SS_RIGHT)
-	$down[3] = GUICtrlCreateInput("", 100, 160, 200, 20)
-	GUICtrlCreateLabel("Hostkey: ", 15, 195, 85, 15, $SS_RIGHT)
-	$down[4] = GUICtrlCreateInput("", 100, 195, 200, 20)
+	GUICtrlCreateLabel("Drive Path: ", 15, 55, 85, 15, $SS_RIGHT)
+	$down[0] = GUICtrlCreateInput("", 105, 55, 200, 20)
+	GUICtrlCreateLabel("Processed Folder: ", 15, 90, 85, 15, $SS_RIGHT)
+	$down[1] = GUICtrlCreateInput("", 105, 90, 200, 20)
 
 	GUICtrlCreateTabItem("UPLOAD")
 	GUICtrlCreateLabel("Information for the Oracle Server", 15, 30, 250, 15)
@@ -145,11 +141,8 @@ EndFunc
 ;; Loads the settings
 Func _SettingsLoadforGUI(ByRef $up, ByRef $down, ByRef $paths)
 	;; Ariel settings
-	GUICtrlSetData($down[0], IniRead($settingsFile, "samba", "sftp_user", ""))
-	GUICtrlSetData($down[1], IniRead($settingsFile, "samba", "sftp_pass", ""))
-	GUICtrlSetData($down[2], IniRead($settingsFile, "samba", "sftp_remotehost", ""))
-	GUICtrlSetData($down[3], IniRead($settingsFile, "samba", "sftp_remotepath", ""))
-	GUICtrlSetData($down[4], IniRead($settingsFile, "samba", "sftp_hostkey", ""))
+	GUICtrlSetData($down[0], IniRead($settingsFile, "samba", "drivepath", ""))
+	GUICtrlSetData($down[1], IniRead($settingsFile, "samba", "pfolder", ""))
 	;; Oracle settings
 	GUICtrlSetData($up[0], IniRead($settingsFile, "oracle", "sftp_user", ""))
 	GUICtrlSetData($up[1], IniRead($settingsFile, "oracle", "sftp_pass", ""))
@@ -166,11 +159,8 @@ EndFunc
 ;; Saves the settings
 Func _SettingsSaveforGUI(ByRef $up, ByRef $down, ByRef $paths)
 	;; Ariel settings
-	IniWrite($settingsFile, "samba", "sftp_user", GUICtrlRead($down[0]))
-	IniWrite($settingsFile, "samba", "sftp_pass", GUICtrlRead($down[1]))
-	IniWrite($settingsFile, "samba", "sftp_remotehost", GUICtrlRead($down[2]))
-	IniWrite($settingsFile, "samba", "sftp_remotepath", GUICtrlRead($down[3]))
-	IniWrite($settingsFile, "samba", "sftp_hostkey", GUICtrlRead($down[4]))
+	IniWrite($settingsFile, "samba", "drivepath", GUICtrlRead($down[0]))
+	IniWrite($settingsFile, "samba", "pfolder", GUICtrlRead($down[1]))
 	;; Oracle settings
 	IniWrite($settingsFile, "oracle", "sftp_user", GUICtrlRead($up[0]))
 	IniWrite($settingsFile, "oracle", "sftp_pass", GUICtrlRead($up[1]))
@@ -187,11 +177,8 @@ EndFunc
 ;; Load the Settings for the ProcessClose
 Func _SettingsLoad(ByRef $up, ByRef $down, ByRef $paths)
 	;; Ariel settings
-	$down[0] = IniRead($settingsFile, "samba", "sftp_user", "")
-	$down[1] = IniRead($settingsFile, "samba", "sftp_pass", "")
-	$down[2] = IniRead($settingsFile, "samba", "sftp_remotehost", "")
-	$down[3] = IniRead($settingsFile, "samba", "sftp_remotepath", "")
-	$down[4] = IniRead($settingsFile, "samba", "sftp_hostkey", "")
+	$down[0] = IniRead($settingsFile, "samba", "drivepath", "")
+	$down[1] = IniRead($settingsFile, "samba", "pfolder", "")
 	;; Oracle settings
 	$up[0] = IniRead($settingsFile, "oracle", "sftp_user", "")
 	$up[1] = IniRead($settingsFile, "oracle", "sftp_pass", "")
@@ -249,10 +236,6 @@ Func _CatFiles($p, $i, $o)
 	ShellExecuteWait("catall.exe", $args, @ScriptDir)
 EndFunc
 
-Func _TimeStamp()
-	return @YEAR & @MON & @MDAY & @HOUR & @MIN & @SEC
-EndFunc
-
 ;; A generic error message box and program exit
 Func _Box($msg)
 	MsgBox(1024, "ALERT", $msg)
@@ -263,61 +246,52 @@ EndFunc
 Func _TheProcess()
 	;; Settings holders
 	Local $up[5], $down[5], $paths[5]
+
+    ;; Set settings
+    _SettingsLoad($up, $down, $paths)
 	
 	;; base directory where the folders are
 	Dim $base_dir = StringLeft(@ScriptDir, StringInStr(@ScriptDir, $paths[2]) - 1)
-
+	
 	;; Calculate the years
 	Dim $year = Int(StringRight(@YEAR, 2))
 	Dim $next = $year + 1
 	Dim $nextnext = $year + 2
 	Dim $last = $year - 1
 	If $last < 0 Then $last = 99
-
+   
 	;;;;;
-	;; DOWNLOAD CORRECTIONS
-	_ScriptDownload($down[0], $down[1], $down[2], $down[4], $down[3], $base_dir & $paths[3], "igco*.*")
+	;; MAKE CORRECTIONS ON EDCONNECT SERVER
+	_CatFiles($down[0], "igco" & $year & "*.*", $last & $year & "corr.tap")
+	_CatFiles($down[0], "igco" & $next & "*.*", $year & $next & "corr.tap")
+	_CatFiles($down[0], "igco" & $nextnext & "*.*", $next & $nextnext & "corr.tap")
+
+    FileMove($down[0] & "\*corr.tap", $base_dir & $paths[0], 1)
+    FileMove($down[0] & "\igco*.*", $down[0] & "\" & $down[1] & "\", 0)
+
+    ;; Upload correction FileS
 	_ScriptUpload($up[0], $up[1], $up[2], $up[4], $up[3], $base_dir & $paths[0], "*.tap")
-	_TransferFiles($dlScr, $dlLog)
-
-	_CatFiles($base_dir & $paths[3], "igco" & $year & "*.*", $last & $year & "corr.tap")
-	_CatFiles($base_dir & $paths[3], "igco" & $next & "*.*", $year & $next & "corr.tap")
-	_CatFiles($base_dir & $paths[3], "igco" & $nextnext & "*.*", $next & $nextnext & "corr.tap")
-
-	FileMove($base_dir & $paths[3] & "\*corr.tap", $base_dir & $paths[0], 1)
-
 	_TransferFiles($upScr, $upLog)
-
-	;; After everything, clear out the TEMP directories. LEAVE $paths[2] ALONE!
-	FileDelete($base_dir & $paths[3] & "\*.*")
 
 	;;;;;
 	;; DOWNLOAD AND COMPILE esar FILES
 	Dim $filesegs[6] = ["isrf", "igsa", "idap", "idsa", "igsa", "igsg"]
-	Dim $twoyears[2] = [$next, $nextnext]
-	For $files In $filesegs
-	   For $yr In $twoyears
-		  _ScriptDownload($down[0], $down[1], $down[2], $down[4], $down[3], $base_dir & $paths[3], $files & $yr & "*.*")
-		  _TransferFiles($dlScr, $dlLog)
-	   Next
-	Next
-
 	Dim $catstr = _ArrayToString($filesegs, "99*.*,") & "99*.*"
-	_CatFiles($base_dir & $paths[3], StringReplace($catstr, "99", $next), $year & $next & "ESAR.TAP")
-	_CatFiles($base_dir & $paths[3], StringReplace($catstr, "99", $nextnext), $next & $nextnext & "ESAR.TAP")
+	_CatFiles($down[0], StringReplace($catstr, "99", $next), $year & $next & "ESAR.TAP")
+	_CatFiles($down[0], StringReplace($catstr, "99", $nextnext), $next & $nextnext & "ESAR.TAP")
 
-	FileMove($base_dir & $paths[3] & "\*ESAR.TAP", $base_dir & $paths[1], 1)
-
+	FileMove($down[0] & "\*ESAR.TAP", $base_dir & $paths[1], 1)
+    For $prefix In $filesegs
+ 	   FileMove($down[0] & "\" & $prefix & "*.*", $down[0] & "\" & $down[1] & "\", 0)
+    Next
+	
+	; Upload to the Oracle Database server
 	_ScriptUpload($up[0], $up[1], $up[2], $up[4], $up[3], $base_dir & $paths[1], "*ESAR.TAP")
-
 	_TransferFiles($upScr, $upLog)
 
-	;; After everything, clear out the TEMP directories. LEAVE $paths[2] ALONE!
-	FileDelete($base_dir & $paths[3] & "\*.*")
-
 	;; Delete the WinSCP scripts
-	FileDelete(@ScriptDir & "\" & $upScr)
-	FileDelete(@ScriptDir & "\" & $dlScr)
+    FileDelete(@ScriptDir & "\" & $upScr)
+    FileDelete(@ScriptDir & "\" & $dlScr)
 
 	;; Alert
 	MsgBox(1024, "Finished", "You may complete the process in Banner.")

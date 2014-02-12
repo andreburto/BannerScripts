@@ -15,7 +15,7 @@ Global $upScr = "upload.txt", $upLog = "up_log.txt"
 $settingsFile = @ScriptDir & "\edload.ini"
 
 ;; Set some initial values
-$winTitle = $winTitle
+$winTitle = "edload.au3"
 $winWidth = 320
 $winHeight = 110
 $startPosX = (@DesktopWidth - $winWidth) / 2
@@ -249,7 +249,7 @@ Func _TheProcess()
 	_CatFiles($down[0], "igco" & $next & "*.*", $year & $next & "CORR.TAP")
 	_CatFiles($down[0], "igco" & $nextnext & "*.*", $next & $nextnext & "CORR.TAP")
 
-	FileMove($down[0] & "\*corr.tap", $base_dir & $paths[0], 1)
+	FileMove($down[0] & "\*corr.tap", $base_dir & $paths[0] & "\", 1)
 	FileMove($down[0] & "\igco*.*", $down[0] & "\" & $down[1] & "\", 0)
 
 	;; Upload correction FileS
@@ -263,7 +263,7 @@ Func _TheProcess()
 	_CatFiles($down[0], StringReplace($catstr, "99", $next), $year & $next & "ESAR.TAP")
 	_CatFiles($down[0], StringReplace($catstr, "99", $nextnext), $next & $nextnext & "ESAR.TAP")
 
-	FileMove($down[0] & "\*ESAR.TAP", $base_dir & $paths[1], 1)
+	FileMove($down[0] & "\*ESAR.TAP", $base_dir & $paths[1] & "\", 1)
 	For $prefix In $filesegs
 		FileMove($down[0] & "\" & $prefix & "*.*", $down[0] & "\" & $down[1] & "\", 0)
 	Next

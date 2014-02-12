@@ -247,29 +247,29 @@ Func _TheProcess()
 	;; Settings holders
 	Local $up[5], $down[5], $paths[5]
 
-    ;; Set settings
-    _SettingsLoad($up, $down, $paths)
-	
+	;; Set settings
+	_SettingsLoad($up, $down, $paths)
+
 	;; base directory where the folders are
 	Dim $base_dir = StringLeft(@ScriptDir, StringInStr(@ScriptDir, $paths[2]) - 1)
-	
+
 	;; Calculate the years
 	Dim $year = Int(StringRight(@YEAR, 2))
 	Dim $next = $year + 1
 	Dim $nextnext = $year + 2
 	Dim $last = $year - 1
 	If $last < 0 Then $last = 99
-   
+
 	;;;;;
 	;; MAKE CORRECTIONS ON EDCONNECT SERVER
-	_CatFiles($down[0], "igco" & $year & "*.*", $last & $year & "corr.tap")
-	_CatFiles($down[0], "igco" & $next & "*.*", $year & $next & "corr.tap")
-	_CatFiles($down[0], "igco" & $nextnext & "*.*", $next & $nextnext & "corr.tap")
+	_CatFiles($down[0], "igco" & $year & "*.*", $last & $year & "CORR.TAP")
+	_CatFiles($down[0], "igco" & $next & "*.*", $year & $next & "CORR.TAP")
+	_CatFiles($down[0], "igco" & $nextnext & "*.*", $next & $nextnext & "CORR.TAP")
 
-    FileMove($down[0] & "\*corr.tap", $base_dir & $paths[0], 1)
-    FileMove($down[0] & "\igco*.*", $down[0] & "\" & $down[1] & "\", 0)
+	FileMove($down[0] & "\*corr.tap", $base_dir & $paths[0], 1)
+	FileMove($down[0] & "\igco*.*", $down[0] & "\" & $down[1] & "\", 0)
 
-    ;; Upload correction FileS
+	;; Upload correction FileS
 	_ScriptUpload($up[0], $up[1], $up[2], $up[4], $up[3], $base_dir & $paths[0], "*.tap")
 	_TransferFiles($upScr, $upLog)
 
@@ -281,17 +281,17 @@ Func _TheProcess()
 	_CatFiles($down[0], StringReplace($catstr, "99", $nextnext), $next & $nextnext & "ESAR.TAP")
 
 	FileMove($down[0] & "\*ESAR.TAP", $base_dir & $paths[1], 1)
-    For $prefix In $filesegs
- 	   FileMove($down[0] & "\" & $prefix & "*.*", $down[0] & "\" & $down[1] & "\", 0)
-    Next
-	
+	For $prefix In $filesegs
+		FileMove($down[0] & "\" & $prefix & "*.*", $down[0] & "\" & $down[1] & "\", 0)
+	Next
+
 	; Upload to the Oracle Database server
 	_ScriptUpload($up[0], $up[1], $up[2], $up[4], $up[3], $base_dir & $paths[1], "*ESAR.TAP")
 	_TransferFiles($upScr, $upLog)
 
 	;; Delete the WinSCP scripts
-    FileDelete(@ScriptDir & "\" & $upScr)
-    FileDelete(@ScriptDir & "\" & $dlScr)
+	FileDelete(@ScriptDir & "\" & $upScr)
+	FileDelete(@ScriptDir & "\" & $dlScr)
 
 	;; Alert
 	MsgBox(1024, "Finished", "You may complete the process in Banner.")

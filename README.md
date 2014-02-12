@@ -12,11 +12,7 @@ finaid
 
 These scripts were designed to manage the files produced by EDconnect and make them to the Banner Batch server.
 
-**edload.au3** - The configuration GUI.
-
-**filemover1.au3** - The program that handles the file movement workflow.
-
-**lib.au3** - Functions used in both programs.
+**edload2.au3** - Updated finaid mover. See its README for more details.
 
 finance
 -------

@@ -250,7 +250,7 @@ Func _TheProcess()
 	_CatFiles($down[0], "igco" & $nextnext & "*.*", $next & $nextnext & "CORR.TAP")
 
 	FileMove($down[0] & "\*corr.tap", $base_dir & $paths[0] & "\", 1)
-	FileMove($down[0] & "\igco*.*", $down[0] & "\" & $down[1] & "\", 0)
+	FileMove($down[0] & "\igco*.*", $down[0] & "\" & $down[1] & "\", 1)
 
 	;; Upload correction FileS
 	_ScriptUpload($up[0], $up[1], $up[2], $up[4], $up[3], $base_dir & $paths[0], "*.tap")
@@ -265,7 +265,7 @@ Func _TheProcess()
 
 	FileMove($down[0] & "\*ESAR.TAP", $base_dir & $paths[1] & "\", 1)
 	For $prefix In $filesegs
-		FileMove($down[0] & "\" & $prefix & "*.*", $down[0] & "\" & $down[1] & "\", 0)
+		FileMove($down[0] & "\" & $prefix & "*.*", $down[0] & "\" & $down[1] & "\", 1)
 	Next
 
 	; Upload to the Oracle Database server

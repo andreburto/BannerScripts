@@ -1,6 +1,9 @@
 finaid
 ======
 
+edload2.au3
+-----------
+
 edload2.au3 is the second generation program build to compress and move files into Banner.
 
 The workflow is as follows:
@@ -16,3 +19,8 @@ The workflow is as follows:
 With the files uploaded to Banner, you can then use the INB interface to load the TAP files.
 
 edload2.au3 requires Windows read and write access to the EDConnect files, either locally or through a mapped directory.
+
+corrdl.au3
+----------
+
+corrdl.au3 and corrdl.ini are files for moving corr??in.dat files from the Batch server to wherever EDConnect wants them.

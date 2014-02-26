@@ -14,6 +14,10 @@ These scripts were designed to manage the files produced by EDconnect and make t
 
 **edload2.au3** - Updated finaid mover. See its README for more details.
 
+**corrdl.au3** - Downloads corrections from the Batch server to EDConnect. Untested.
+
+**corrdl.ini** - The INI file with settings for corrdl.au3.
+
 finance
 -------
 

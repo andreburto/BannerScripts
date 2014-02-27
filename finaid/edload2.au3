@@ -9,7 +9,6 @@ AutoItSetOption("MustDeclareVars", 1)
 Global $gui, $winTitle, $winWidth, $winHeight, $startPosX, $startPosY
 Global $settingsFile
 Global $btnBegin, $btnSettings, $btnExit
-Global $upScr = "upload.txt", $upLog = "up_log.txt"
 
 ;; declare globals
 $settingsFile = @ScriptDir & "\edload.ini"

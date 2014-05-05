@@ -5,7 +5,7 @@ AutoItSetOption("MustDeclareVars", 1)
 Global $settingsFile = @ScriptDir & "\corrdl.ini"
 Global $dlScr = "download.txt", $dlLog = "down_log.txt"
 Global $rmScr = "delete.txt", $rmLog = "rm_log.txt"
-Global $filepattern = "corr*.* craa*.* crpg*.* crth*.* pgrq*.* trninfin*.*"
+Global $filepattern = "corr*.*" ;;"craa*.* crpg*.* crth*.* pgrq*.* trninfin*.*"
 Local $up[5], $down[5]
 
 ;; load settings
@@ -19,11 +19,11 @@ For $fpat In StringSplit($filepattern, " ", 1)
    ;; DOWNLOAD CORRECTIONS
    _ScriptDownload($down[0], $down[1], $down[2], $down[4], $down[3], $bl, $fpat)
    _TransferFiles($dlScr, $dlLog)
-
-   ;; Remove corrections from the server
-   _ScriptDelete($down[0], $down[1], $down[2], $down[4], $down[3], $filepattern)
-   _TransferFiles($rmScr, $rmLog)
 Next
+
+;; Remove corrections from the server
+_ScriptDelete($down[0], $down[1], $down[2], $down[4], $down[3], $filepattern)
+_TransferFiles($rmScr, $rmLog)
 
 ;; Remove Winscp.rnd file from share
 FileDelete($bl & "winscp.rnd")
